@@ -6,6 +6,13 @@ function Game(width_px, height_px, tilesize) {
   function start() {
     this.map = Map(width_px / tilesize, height_px / tilesize, tilesize);
     this.player = Crafty.e('Player').at(1,1);
+    console.log(this.player);
+    var collisions = this.player.hit('Block');
+    if (collisions) {
+      collisions.forEach(function (collision) {
+        collision.obj.destroy();
+      });
+    }
   }
 }
 

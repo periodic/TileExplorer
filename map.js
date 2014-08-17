@@ -28,6 +28,8 @@ Crafty.c('Block', {
 function Map(width_tiles, height_tiles, tilesize) {
   tilesize = tilesize || 32;
 
+  Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource("test.json");
+
   console.log("Building map " + width_tiles + "x" + height_tiles);
 
   for (var x = 0; x < width_tiles; x++) {

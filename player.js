@@ -25,6 +25,7 @@ Crafty.c('Player', {
       x: this.tilesize * x,
       y: this.tilesize * y,
     });
+    return this;
   },
   directionChanged: function(dir) {
     if (dir.x == 0 && dir.y == 0) return;
@@ -43,10 +44,12 @@ Crafty.c('Player', {
     };
     this.gun.x = center.x + x_dir * 0.5 * (this.w + this.gun.w);
     this.gun.y = center.y + y_dir * 0.5 * (this.h + this.gun.h);
+    return this;
   },
   fire: function () {
-    console.log('Firing gun!');
+    console.log('Firing gun!', this._direction);
     this.gun.fire(this._direction);
+    return this;
   },
   stopMovement: function () {
     this._speed = 0;
@@ -71,18 +74,19 @@ Crafty.c('Gun', {
       .color('yellow');
   },
   fire: function (dir) {
-    console.log('Creating bullet.');
     var bullet = Crafty.e('Bullet')
       .attr({
         x: this.x,
         y: this.y,
       })
       .fire(dir);
+    console.log('Creating bullet.', this.x, this.y, bullet);
+    return this;
   },
 });
 
 Crafty.c('Bullet', {
-  _speed: 20,
+  _speed: 10,
   init: function() {
     this.requires('2D, Canvas, Color, Collision')
     .color('yellow')
@@ -93,20 +97,21 @@ Crafty.c('Bullet', {
     .bind('EnterFrame', this.enterFrame)
     .onHit('Solid', this.hitSolid);
   },
-  enterFrame: function () {
-    this.shift({
-      x: this._speed * this._direction.x,
-      y: this._speed * this._direction.y,
-    });
+  enterFrame: function (e) {
+    console.log(e);
+    this.x = this.x + this._direction.x * this._speed;
+    this.y = this.y + this._direction.y * this._speed;
   },
   fire: function(dir) {
-    console.log('Bullet fired.');
     this._direction = dir;
+    return this;
   },
-  hitSolid: function (solid) {
-    if (!solid.has('Edge')) {
-      solid.explode();
-    }
+  hitSolid: function (collisions) {
+    collisions.forEach(function (collision) {
+      if (!collision.obj.has('Edge')) {
+        collision.obj.explode();
+      }
+    });
 
     this.destroy();
   }
