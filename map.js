@@ -1,3 +1,5 @@
+define(['lib/crafty'], function (Crafty) {
+
 Crafty.c('Edge', {
   init: function () {
     this.requires('Block');
@@ -28,7 +30,7 @@ Crafty.c('Block', {
 function Map(width_tiles, height_tiles, tilesize) {
   tilesize = tilesize || 32;
 
-  Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource("test.json");
+  //Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR );
 
   console.log("Building map " + width_tiles + "x" + height_tiles);
 
@@ -46,3 +48,8 @@ function Map(width_tiles, height_tiles, tilesize) {
     }
   }
 }
+
+return Map;
+
+
+});

@@ -1,3 +1,7 @@
+define(['lib/crafty'], function (Crafty) {
+
+console.log("Loading Player.");
+
 Crafty.c('Player', {
   _tilesize: 32,
   init: function () {
@@ -116,3 +120,7 @@ Crafty.c('Bullet', {
     this.destroy();
   }
 });
+
+return {};
+
+}); // define
