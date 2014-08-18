@@ -13,7 +13,7 @@ Here are the basic steps for getting set up.  Step 11 is a bit janky, but it's t
 1. Fork the repository: https://github.com/periodic/TileExplorer
 1. Get the source code from your repository.
 1. Open game.html in your browser.
-1. Install Tiled from mapeditor.org
+1. Install Tiled from http://www.mapeditor.org
 1. Open data/test.tmx in Tiled.
 1. Edit something.
 1. Save the file.
