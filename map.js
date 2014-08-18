@@ -28,7 +28,7 @@ Crafty.c('ColorChanger', {
   },
   onPlayerEnter: function(collisions) {
     collisions.forEach(function (collision) {
-      collision.obj.color(this.properties.color);
+      collision.obj.gun.color(this.properties.color);
     }, this);
   },
 });

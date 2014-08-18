@@ -2,27 +2,50 @@ define(['lib/crafty'], function (Crafty) {
 
 console.log("Loading Player.");
 
+Crafty.sprite(48, 'sprites/spaceship_game_sprites.png', {
+  'PlayerSprite': [3,0]
+})
+
+function center(entity) {
+  return {
+    x: entity.x + entity.w,
+    y: entity.y + entity.h,
+  };
+};
+
 Crafty.c('Player', {
   _tilesize: 32,
   init: function () {
-    this.requires('2D, Canvas, Color, Fourway, Collision')
+    this.requires('2D, Canvas, Fourway, Collision, SpriteAnimation, PlayerSprite')
       .fourway(4)
       .attr({
         w: this._tilesize,
         h: this._tilesize,
         z: 100,
-      })
-      .color('red')
-      .onHit('Solid', this.stopMovement)
-      .bind('NewDirection', this.directionChanged);
-      this.gun = Crafty.e('Gun');
-      this.attach(this.gun);
+      }).onHit('Solid', this.stopMovement)
+      .bind('NewDirection', this.directionChanged)
+      .origin(this._w / 2, this._h /2) 
+      .reel('PlayerWalking', 500, [
+        [0,3], [1,3], [2,3], [3,3],
+        [0,4], [1,4], [2,4], [3,4],
+      ])
+      .animate('PlayerWalking', -1)
+      .pauseAnimation();
 
-      this.bind('KeyDown', function(e) {
-        if (e.key == Crafty.keys.SPACE) {
-          this.fire();
-        }
-      });
+    // Sprite is oriented down.
+    this.baseVec = new Crafty.math.Vector2D(0, 1);
+    this._direction = [0, 1];
+
+    this.gun = Crafty.e('Gun');
+    this.attach(this.gun);
+    this.gun.x = this.x + 0.5 * this.w - 0.5 * this.gun.w;
+    this.gun.y = this.y + this.h;
+
+    this.bind('KeyDown', function(e) {
+      if (e.key == Crafty.keys.SPACE) {
+        this.fire();
+      }
+    });
   },
   at: function (x, y, tilesize) {
     this.tilesize = tilesize || this._tilesize;
@@ -33,7 +56,13 @@ Crafty.c('Player', {
     return this;
   },
   directionChanged: function(dir) {
-    if (dir.x == 0 && dir.y == 0) return;
+    if (dir.x == 0 && dir.y == 0) {
+      this.resetAnimation();
+      this.pauseAnimation();
+      return;
+    }
+
+    this.resumeAnimation();
 
     var x_dir = dir.x != 0 ? dir.x / Math.abs(dir.x) : 0;
     var y_dir = dir.y != 0 ? dir.y / Math.abs(dir.y) : 0;
@@ -43,12 +72,9 @@ Crafty.c('Player', {
       y: y_dir,
     };
 
-    var center = {
-      x: this.x + 0.5 * this.w - 0.5 * this.gun.w,
-      y: this.y + 0.5 * this.h - 0.5 * this.gun.h,
-    };
-    this.gun.x = center.x + x_dir * 0.5 * (this.w + this.gun.w);
-    this.gun.y = center.y + y_dir * 0.5 * (this.h + this.gun.h);
+    var vec = new Crafty.math.Vector2D(x_dir, y_dir);
+    this.rotation = Crafty.math.radToDeg(this.baseVec.angleBetween(vec));
+
     return this;
   },
   fire: function () {
@@ -79,6 +105,7 @@ Crafty.c('Gun', {
   },
   fire: function (dir) {
     var bullet = Crafty.e('Bullet')
+      .color(this.color())
       .attr({
         x: this.x,
         y: this.y,
@@ -92,7 +119,6 @@ Crafty.c('Bullet', {
   _speed: 10,
   init: function() {
     this.requires('2D, Canvas, Color, Collision')
-    .color('yellow')
     .attr({
       w: 10,
       h: 10,
