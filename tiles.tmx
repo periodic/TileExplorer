@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJzjYmBg4BoCWI5CPGreqHmj5o2aN1TNG6wYAKgBI6E=
+   eJzjYmBg4BoCWI5ELAnEUlAsTQXzFIFYCYqVqWCeJhBrQbE2FcxDx6PmjZo3mMxDz4+UmoeeHwnpJ1QekGoeofIAPX8TMo9QeTBYMQDb2CRB
   </data>
  </layer>
  <layer name="Wall" width="20" height="20">
@@ -13,9 +13,9 @@
    eJxjZGBgYKISZgZiTiAWAWIhCrEoEHNDzQPRlAKYOaPmjZo3at6oeUPJPBkGystmWah5ggyUl80wLAzEACG/Bds=
   </data>
  </layer>
- <layer name="Objects" width="20" height="20">
+ <layer name="Destructable" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFIKCPQ1wPja9Oa4eQCEh1D7p/qAXU6GAHMpAnUT0+N+GKe2oBeoQHDJAaLpQAUvyFrhbGx5V+1XCIowNaxx02YACl9Rgoi1t6pgtaAQBcIgO3
+   eJxjYBjaQJ5K5uhTyRxqAWL9pY7ENiDDHnL0YANqVDKHWEAofNQJyCMDWsc9KW6hFOAKF1r4kRppB1fYkJqecKkfrP6GAXrnG2oDAH2nAy0=
   </data>
  </layer>
  <layer name="Fixed" width="20" height="20">
@@ -23,7 +23,31 @@
    <property name="indestructable" value="1"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgeQGGgHUAnoDDQDiABKBApRozcQAMFMuWoYT4tAC3to6XZ9AYKdNZHqV56AwCq/AGh
+   eJxjYBgeQGGgHUAnoDDQDiABKBApRozcQAOFIW4+Pe2jpdn0BgoD7YBBDgAY/AFB
   </data>
  </layer>
+ <objectgroup name="ObjLayer" width="20" height="20">
+  <object name="Square1" type="ColorChanger" x="463" y="494" width="105" height="72">
+   <properties>
+    <property name="color" value="red"/>
+   </properties>
+  </object>
+  <object name="Circle1" type="ColorChanger" x="82" y="467" width="96" height="96">
+   <properties>
+    <property name="color" value="green"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="Polygon1" type="ColorChanger" x="480" y="96">
+   <properties>
+    <property name="color" value="blue"/>
+   </properties>
+   <polygon points="-19,-18 85,-17 85,52 -19,52"/>
+  </object>
+  <object name="Tile1" type="ColorChanger" gid="46" x="304" y="337">
+   <properties>
+    <property name="color" value="purple"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

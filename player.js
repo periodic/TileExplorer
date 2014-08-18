@@ -110,8 +110,9 @@ Crafty.c('Bullet', {
   },
   hitSolid: function (collisions) {
     collisions.forEach(function (collision) {
-      if (collision.obj.has('Block') && !collision.obj.has('Edge')) {
+      if (collision.obj.has('Destructable')) {
         collision.obj.explode();
+        Crafty.trigger('UpdateScore');
       }
     });
 

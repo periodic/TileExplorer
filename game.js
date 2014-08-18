@@ -28,10 +28,18 @@ function Game(width_px, height_px, tilesize) {
         collision.obj.destroy();
       });
     }
-    console.log("Game started.");
+    var maxObj = Crafty('Destructable').length;
+    var score = Crafty.e("2D, Canvas, Text").attr({
+      x: 10,
+      y: 10,
+    }).textFont({weight: 'bold', size: '20px'})
+      .textColor('#FFFFFF')
+      .text("Score: 0")
+      .bind('UpdateScore', function () {
+        this.text("Score: " + (maxObj - Crafty('Destructable').length));
+      });
 
-    console.log(Crafty('Player'));
-    console.log(Crafty(Crafty('Block')[0]));
+    console.log("Game started.");
   }
 }
 
