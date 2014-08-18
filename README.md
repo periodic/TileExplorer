@@ -22,3 +22,12 @@ Here are the basic steps for getting set up.  Step 11 is a bit janky, but it's t
 1. Reload game.html and see your change
 1. Upload your change to GitHub.
 1. Go to GitHub and create a pull request to merge your changes into my repository.
+
+TODO
+----
+
+1. Add object-layer support to the Tile importing library.
+2. Add animations to the player object.
+3. Add sounds for player collision, firing and destroying objects.
+4. Create a larger map and allow scrolling within a viewport.
+5. Add mouse-targetting, causing firing in the direction of the mouse when clicked.
