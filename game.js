@@ -2,12 +2,15 @@ require.config({
   urlArgs: "bust=" + (new Date()).getTime()
 });
 
-define(['lib/crafty', 'map', 'player'], function(Crafty, Map, Player) {
+define(['lib/crafty', 'map', 'player', 'text!data/test.json'],
+       function(Crafty, Map, Player, tileJson) {
 console.log("Loading Game.");
 
-Crafty.init(400, 400);
+var size = 32 * 20;
+
+Crafty.init(size, size);
 Crafty.background('black');
-game = Game(400, 400, 20);
+var game = Game(size, size, 20);
 game.start();
 
 function Game(width_px, height_px, tilesize) {
@@ -16,9 +19,9 @@ function Game(width_px, height_px, tilesize) {
   };
 
   function start() {
-    this.map = Map(width_px / tilesize, height_px / tilesize, tilesize);
-    this.player = Crafty.e('Player').at(1,1);
-    console.log(this.player);
+    var tiles = JSON.parse(tileJson);
+    this.map = Map(width_px / tilesize, height_px / tilesize, tilesize, tiles);
+    this.player = Crafty.e('Player').at(3,3);
     var collisions = this.player.hit('Block');
     if (collisions) {
       collisions.forEach(function (collision) {
@@ -26,6 +29,9 @@ function Game(width_px, height_px, tilesize) {
       });
     }
     console.log("Game started.");
+
+    console.log(Crafty('Player'));
+    console.log(Crafty(Crafty('Block')[0]));
   }
 }
 

@@ -10,6 +10,7 @@ Crafty.c('Player', {
       .attr({
         w: this._tilesize,
         h: this._tilesize,
+        z: 100,
       })
       .color('red')
       .onHit('Solid', this.stopMovement)
@@ -51,7 +52,6 @@ Crafty.c('Player', {
     return this;
   },
   fire: function () {
-    console.log('Firing gun!', this._direction);
     this.gun.fire(this._direction);
     return this;
   },
@@ -84,7 +84,6 @@ Crafty.c('Gun', {
         y: this.y,
       })
       .fire(dir);
-    console.log('Creating bullet.', this.x, this.y, bullet);
     return this;
   },
 });
@@ -102,7 +101,6 @@ Crafty.c('Bullet', {
     .onHit('Solid', this.hitSolid);
   },
   enterFrame: function (e) {
-    console.log(e);
     this.x = this.x + this._direction.x * this._speed;
     this.y = this.y + this._direction.y * this._speed;
   },
@@ -112,7 +110,7 @@ Crafty.c('Bullet', {
   },
   hitSolid: function (collisions) {
     collisions.forEach(function (collision) {
-      if (!collision.obj.has('Edge')) {
+      if (collision.obj.has('Block') && !collision.obj.has('Edge')) {
         collision.obj.explode();
       }
     });

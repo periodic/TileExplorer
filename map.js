@@ -1,17 +1,15 @@
-define(['lib/crafty'], function (Crafty) {
+define(['lib/crafty', 'lib/Tiled/tiledmapbuilder'], function (Crafty) {
 
 Crafty.c('Edge', {
   init: function () {
     this.requires('Block');
-    this.color('green');
   },
 });
 
 Crafty.c('Block', {
   _tilesize: 32,
   init: function () {
-    this.requires('Solid, 2D, Canvas, Color');
-    this.color('blue');
+    this.requires('Solid');
   },
   at: function (x, y, tilesize) {
     this.tilesize = tilesize || this._tilesize;
@@ -27,26 +25,33 @@ Crafty.c('Block', {
   },
 });
 
-function Map(width_tiles, height_tiles, tilesize) {
+function Map(width_tiles, height_tiles, tilesize, tilesData) {
   tilesize = tilesize || 32;
 
-  //Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR );
+  var mapBuilder = Crafty.e("2D, Canvas, TiledMapBuilder").setMapDataSource(tilesData);
 
-  console.log("Building map " + width_tiles + "x" + height_tiles);
+  mapBuilder.createWorld(function (map) {
+    console.log("World created.");
+  });
 
-  for (var x = 0; x < width_tiles; x++) {
-    for (var y = 0; y < height_tiles; y++) {
+  mapBuilder.getEntitiesInLayer('Objects').forEach(function (obj) {
+    obj.addComponent('Block');
+  });
+  mapBuilder.getEntitiesInLayer('Wall').forEach(function (obj) {
+    obj.addComponent('Edge');
+  });
+  mapBuilder.getEntitiesInLayer('Fixed').forEach(function (obj) {
+    obj.addComponent('Solid');
+  });
 
-      var at_edge = x === 0 || y === 0 || x === width_tiles - 1 || y === height_tiles - 1;
-      var should_be_block = at_edge || Math.random() < 0.1;
 
-      if (at_edge) {
-        Crafty.e('Edge').at(x,y, tilesize);
-      } else if (should_be_block) {
-        Crafty.e('Block').at(x,y, tilesize);
-      }
-    }
-  }
+  /*
+  mapBuilder.getEntity('Door Trigger 1')
+      .addComponent('TiggerArea')
+      .onEnter(function () {
+        Crafty('Door 1').open();
+      });
+      */
 }
 
 return Map;
