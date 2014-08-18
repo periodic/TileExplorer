@@ -2,7 +2,7 @@ require.config({
   urlArgs: "bust=" + (new Date()).getTime()
 });
 
-define(['lib/crafty', 'map', 'player', 'data/test'],
+define(['lib/crafty', 'map', 'player', 'tiles'],
        function(Crafty, Map, Player, tiles) {
 console.log("Loading Game.");
 

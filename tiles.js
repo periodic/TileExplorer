@@ -57,7 +57,7 @@ define({ "height":20,
  "tilesets":[
         {
          "firstgid":1,
-         "image":"data/tmw_desert_spacing.png",
+         "image":"data\/tmw_desert_spacing.png",
          "imageheight":199,
          "imagewidth":265,
          "margin":1,
@@ -73,4 +73,4 @@ define({ "height":20,
  "tilewidth":32,
  "version":1,
  "width":20
-});
+})
