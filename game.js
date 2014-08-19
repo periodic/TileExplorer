@@ -28,6 +28,7 @@ function Game(width_px, height_px, tilesize) {
         collision.obj.destroy();
       });
     }
+
     var maxObj = Crafty('Destructable').length;
     var score = Crafty.e("2D, Canvas, Text").attr({
       x: 10,

@@ -6,12 +6,29 @@ Crafty.sprite(48, 'sprites/spaceship_game_sprites.png', {
   'PlayerSprite': [3,0]
 })
 
+Crafty.audio.add('bump', 'sounds/bump.mp3');
+Crafty.audio.add({
+  'gun': ['sounds/gun.mp3'],
+  'destroyed': ['sounds/destroyed.mp3'],
+});
+
 function center(entity) {
   return {
     x: entity.x + entity.w,
     y: entity.y + entity.h,
   };
 };
+
+function limitSound(sound_id, delay_ms) {
+  var time = Date.now();
+
+  return function () {
+    if (Date.now() > time + delay_ms) {
+      time = Date.now();
+      Crafty.audio.play(sound_id);
+    }
+  };
+}
 
 Crafty.c('Player', {
   _tilesize: 32,
@@ -40,6 +57,8 @@ Crafty.c('Player', {
     this.attach(this.gun);
     this.gun.x = this.x + 0.5 * this.w - 0.5 * this.gun.w;
     this.gun.y = this.y + this.h;
+
+    this.bumpSound = limitSound('bump', 500);
 
     this.bind('KeyDown', function(e) {
       if (e.key == Crafty.keys.SPACE) {
@@ -87,6 +106,7 @@ Crafty.c('Player', {
       this.x -= this._movement.x;
       this.y -= this._movement.y;
     }
+    this.bumpSound();
   },
 });
 
@@ -102,6 +122,7 @@ Crafty.c('Gun', {
         h: 10,
       })
       .color('yellow');
+    this.fireSound = limitSound('gun', 100);
   },
   fire: function (dir) {
     var bullet = Crafty.e('Bullet')
@@ -111,6 +132,7 @@ Crafty.c('Gun', {
         y: this.y,
       })
       .fire(dir);
+    this.fireSound();
     return this;
   },
 });
@@ -125,6 +147,7 @@ Crafty.c('Bullet', {
     })
     .bind('EnterFrame', this.enterFrame)
     .onHit('Solid', this.hitSolid);
+    this.destructionSound = limitSound('destroyed', 100);
   },
   enterFrame: function (e) {
     this.x = this.x + this._direction.x * this._speed;
@@ -135,12 +158,14 @@ Crafty.c('Bullet', {
     return this;
   },
   hitSolid: function (collisions) {
+    var sound = this.destructionSound;
     collisions.forEach(function (collision) {
       if (collision.obj.has('Destructable')) {
         collision.obj.explode();
+        sound();
         Crafty.trigger('UpdateScore');
       }
-    });
+    }, this);
 
     this.destroy();
   }
