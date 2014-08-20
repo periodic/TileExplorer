@@ -7,8 +7,13 @@ require.config({
     'lib/crafty': {
       exports: 'Crafty',
     },
-    'lib/Tiled/tiledmapbuilder': ['lib/Tiled/modules/create_mocks_module'],
+    'lib/Tiled/tiledmapbuilder': [
+      'lib/Tiled/modules/create_mocks_module',
+      'lib/crafty',
+    ],
   },
 });
 
-require(['game']);
+require(['game'], function (game) {
+  window.game = game;
+});

@@ -41,7 +41,6 @@ function Map(width_tiles, height_tiles, tilesize, tilesData) {
   mapBuilder.createWorld(function (map) {
     console.log("World created.");
   });
-
 }
 
 return Map;

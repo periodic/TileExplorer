@@ -122,6 +122,19 @@ define({ "height":20,
                  "width":0,
                  "x":304,
                  "y":337
+                }, 
+                {
+                 "height":32,
+                 "name":"Player",
+                 "properties":
+                    {
+
+                    },
+                 "type":"Player",
+                 "visible":true,
+                 "width":32,
+                 "x":96,
+                 "y":96
                 }],
          "opacity":1,
          "type":"objectgroup",

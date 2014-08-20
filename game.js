@@ -2,35 +2,37 @@ require.config({
   urlArgs: "bust=" + (new Date()).getTime()
 });
 
-define(['lib/crafty', 'map', 'player', 'tiles'],
+define(['lib/crafty', 'map', 'player'],
        function(Crafty, Map, Player, tiles) {
 console.log("Loading Game.");
 
-var size = 32 * 20;
+var game = {};
+game.tile_size_pixels = 32;
+game.view_width_tiles = 20;
+game.view_height_tiles = 20;
 
-Crafty.init(size, size);
+game.view_width_pixels = function () {
+  return this.tile_size_pixels * this.view_width_tiles;
+};
+game.view_height_pixels = function () {
+  return this.tile_size_pixels * this.view_height_tiles;
+};
+
+Crafty.init(game.view_width_pixels(), game.view_height_pixels());
 Crafty.background('black');
-var game = Game(size, size, 20);
-game.start();
+Crafty.viewport.init(game.view_width_pixels(), game.view_height_pixels());
+Crafty.viewport.clampToEntities=false;
 
-function Game(width_px, height_px, tilesize) {
-  return {
-    start: start,
-  };
-
-  function start() {
-    //var tiles = JSON.parse(tileJson);
-    this.map = Map(width_px / tilesize, height_px / tilesize, tilesize, tiles);
-    this.player = Crafty.e('Player').at(3,3);
-    var collisions = this.player.hit('Block');
-    if (collisions) {
-      collisions.forEach(function (collision) {
-        collision.obj.destroy();
-      });
-    }
+Crafty.scene("Level1", function () {
+  require(['level1'], function (tiles) {
+    game.map = Map(
+      game.view_width_tiles,
+      game.view_height_tiles,
+      game.tile_size_pixels,
+      tiles);
 
     var maxObj = Crafty('Destructable').length;
-    var score = Crafty.e("2D, Canvas, Text").attr({
+    game.score = Crafty.e("2D, Canvas, Text").attr({
       x: 10,
       y: 10,
     }).textFont({weight: 'bold', size: '20px'})
@@ -40,10 +42,47 @@ function Game(width_px, height_px, tilesize) {
         this.text("Score: " + (maxObj - Crafty('Destructable').length));
       });
 
-    console.log("Game started.");
-  }
+    Crafty.viewport.follow(Crafty('Player'), 0, 0);
+
+    console.log("Level 1 started.");
+  });
+});
+
+Crafty.scene("Level2", function () {
+  require(['level2'], function (tiles) {
+    game.map = Map(
+      game.view_width_tiles,
+      game.view_height_tiles,
+      game.tile_size_pixels,
+      tiles);
+
+    var maxObj = Crafty('Destructable').length;
+    game.score = Crafty.e("2D, Canvas, Text").attr({
+      x: 10,
+      y: 10,
+    }).textFont({weight: 'bold', size: '20px'})
+      .textColor('#FFFFFF')
+      .text("Score: 0")
+      .bind('UpdateScore', function () {
+        this.text("Score: " + (maxObj - Crafty('Destructable').length));
+      });
+
+    Crafty.viewport.follow(Crafty('Player'), 0, 0);
+
+    console.log("Level 2 started.");
+  });
+});
+
+game.level1 = function () {
+  Crafty.scene('Level1');
 }
 
-return game;
+game.level2 = function () {
+  Crafty.scene('Level2');
+}
 
+game.level1();
+
+window.game = game;
+return game;
 }); // define

@@ -4535,5 +4535,6 @@
    </properties>
   </object>
   <object x="864" y="771" width="29" height="27"/>
+  <object name="Player" type="Player" x="64" y="64" width="32" height="32"/>
  </objectgroup>
 </map>
