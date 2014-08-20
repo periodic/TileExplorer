@@ -3,6 +3,8 @@ TileExplorer
 
 A simple tile-based JavaScript game.
 
+You can [view it live](https://periodic.github.io/TileExplorer/game.html) based on the gh-pages branch at.
+
 Getting Started
 ---------------
 
